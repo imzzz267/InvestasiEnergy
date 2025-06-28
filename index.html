@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InvestasiEnergy</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background-color: #0a5c38;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    nav {
+      background-color: #e1f0e7;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #0a5c38;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #0a5c38;
+      color: white;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #0a5c38;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .bonus, .dashboard {
+      background-color: #d4edda;
+      padding: 15px;
+      border-left: 6px solid #28a745;
+      margin-top: 30px;
+    }
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #fafafa;
+    }
+    .product-card img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .beli-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      animation: pop 0.3s ease-in-out;
+    }
+    @keyframes pop {
+      0% {transform: scale(0.8); opacity: 0;}
+      100% {transform: scale(1); opacity: 1;}
+    }
+    .modal-content h3 {
+      margin-top: 0;
+    }
+    .modal-content p {
+      margin: 10px 0;
+    }
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #eee;
+      margin-top: 40px;
+    }
+  </style>
+  <script>
+    const saldoUser = 200000; // Simulasi saldo userfunction tampilkanSaldo() {
+  const email = document.getElementById("user-email").value.toLowerCase();
+  const saldoArea = document.getElementById("hasil-saldo");
+  const dataDummy = {
+    "budi@gmail.com": 100000,
+    "vinny.store@gmail.com": 200000,
+    "andi@gmail.com": 300000
+  };
+  if (dataDummy[email]) {
+    const modal = dataDummy[email];
+    const saldo = modal * 13;
+    saldoArea.innerHTML = `
+      <p><strong>Halo, ${email}</strong></p>
+      <p>Total Investasi: Rp${modal.toLocaleString()}</p>
+      <p><strong>Saldo Diproyeksikan (1300%): Rp${saldo.toLocaleString()}</strong></p>
+    `;
+  } else {
+    saldoArea.innerHTML = <p style='color:red;'>Email tidak ditemukan.</p>;
+  }
+}
+
+function showModal(nama, harga, durasi, harian, total) {
+  if (saldoUser < 50000) {
+    alert("Minimal topup harus Rp50.000");
+    return;
+  }
+  const modal = document.getElementById("popup");
+  const isi = document.getElementById("popup-isi");
+  isi.innerHTML = `
+    <h3>${nama}</h3>
+    <p>Harga: Rp${harga.toLocaleString()}</p>
+    <p>Valid: ${durasi} hari</p>
+    <p>Pendapatan Harian: Rp${harian.toLocaleString()}</p>
+    <p>Total Pendapatan: Rp${total.toLocaleString()}</p>
+    <p>Saldo kamu: Rp${saldoUser.toLocaleString()}</p>
+    <button onclick="konfirmasiBeli('${nama}', ${harga})">Konfirmasi Beli</button>
+    <button onclick="tutupModal()" style="background:#ccc;color:#333;">Tutup</button>
+  `;
+  modal.style.display = "flex";
+}
+
+function konfirmasiBeli(nama, harga) {
+  if (saldoUser < harga) {
+    alert("Saldo tidak mencukupi untuk membeli produk ini.");
+    return;
+  }
+  const nomorAdmin = "6289664991119";
+  const pesan = Halo admin, saya ingin membeli produk ${nama} seharga Rp${harga.toLocaleString()};
+  const url = https://wa.me/${nomorAdmin}?text=${encodeURIComponent(pesan)};
+  window.open(url, '_blank');
+}
+
+function tutupModal() {
+  document.getElementById("popup").style.display = "none";
+}
+
+  </script>
+</head>
+<body>
+  <header>
+    <div class="logo">⚡ InvestasiEnergy</div>
+    <p>Naikkan uangmu hingga 1300% dalam 35 hari!</p>
+  </header>  <nav>
+    <a href="#simulasi">Beranda</a>
+    <a href="#deposit">Deposit</a>
+    <a href="#saldo">Cek Saldo</a>
+    <a href="#produk">Investasi</a>
+  </nav>  <div class="container" id="produk">
+    <h2>Pilihan Produk Investasi</h2>
+    <div class="product-card">
+      <img src="logo.png" alt="logo">
+      <h3>Investasi 50rb</h3>
+      <p>Harga: Rp 50.000</p>
+      <button class="beli-btn" onclick="showModal('Investasi 50rb', 50000, 60, 10000, 600014)">Beli</button>
+    </div>
+    <div class="product-card">
+      <img src="logo.png" alt="logo">
+      <h3>Investasi 160rb</h3>
+      <p>Harga: Rp 160.000</p>
+      <button class="beli-btn" onclick="showModal('Investasi 160rb', 160000, 60, 35000, 2100014)">Beli</button>
+    </div>
+  </div>  <div class="modal" id="popup">
+    <div class="modal-content" id="popup-isi"></div>
+  </div>  <footer>
+    &copy; 2025 InvestasiEnergy
+  </footer>
+</body>
+</html>
